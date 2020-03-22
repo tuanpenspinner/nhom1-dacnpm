@@ -10,10 +10,10 @@ export class App extends Component {
     return (
       <Router>
         <Switch>
-          <Route path="/nhom1-dacnpm" exact>
+          <Route path="/" exact>
             <Box />
           </Route>
-          <Route path="/nhom1-dacnpm/playgame" exact>
+          <Route path="/playgame" exact>
             <Game />
           </Route>
           <Route>
