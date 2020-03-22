@@ -13,7 +13,7 @@ export class App extends Component {
           <Route path="/nhom1-dacnpm" exact>
             <Box />
           </Route>
-          <Route path="/nhom1-dacnpm/playgame">
+          <Route path="/nhom1-dacnpm/playgame" exact>
             <Game />
           </Route>
           <Route>
