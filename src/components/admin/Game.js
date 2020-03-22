@@ -9,7 +9,7 @@ export class Game extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      endpoint: "http://localhost:8000",
+      endpoint: "https://dacnpm-nhom1.herokuapp.com",
       startPlay: false,
       questions: [],
       numberMember: 0,
@@ -99,7 +99,7 @@ export class Game extends Component {
 
   getData = () => {
     axios
-      .get(`http://localhost:8000/getdata`)
+      .get(`https://dacnpm-nhom1.herokuapp.com/getdata`)
       .then(res => {
         const questions = res.data;
         this.setState({
