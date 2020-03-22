@@ -3,6 +3,7 @@ import PlayGame from "./PlayGame";
 import PreparePlayGame from "./PreparePlayGame";
 import openSocket from "socket.io-client";
 import axios from "axios";
+import "./playgame.css"
 
 export class Game extends Component {
   constructor(props) {

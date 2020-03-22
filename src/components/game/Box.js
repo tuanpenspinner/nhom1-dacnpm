@@ -5,6 +5,7 @@ import Question from "./Quetions";
 import Img from "./Img";
 import EnterPin from "./EnterPin";
 import openSocket from "socket.io-client";
+import "./game.css";
 
 export class Box extends Component {
   constructor(props) {
