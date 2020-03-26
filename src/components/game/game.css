@@ -5,9 +5,11 @@ body {
 
 .wrapper {
     height: 100vh;
-    margin: 0 auto;
+    display: flex;
     background: #cabf28;
-    text-align: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .question {
@@ -26,19 +28,12 @@ body {
 }
 
 .answer {
-    width: 80%;
-    margin: 10px auto
-}
-.btn-secondary,
-.btn-secondary:hover,
-.btn-secondary:visited,
-.btn-secondary:focus {
-    background-color: #8064A2;
-    border-color: #8064A2;
+    margin: 20px ;
 }
 
-.enterpin {
-    width: 30%;
-    margin: 30vh auto;
-}
+.answers {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content:space-between
 
+}

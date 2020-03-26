@@ -13,7 +13,7 @@ export class App extends Component {
           <Route path="/" exact>
             <Box />
           </Route>
-          <Route path="/playgame" exact>
+          <Route path="/playgame">
             <Game />
           </Route>
           <Route>

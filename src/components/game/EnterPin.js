@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import './EnterPin.css'
 
 export class EnterPin extends Component {
   onClick = () => {
@@ -15,6 +16,7 @@ export class EnterPin extends Component {
             e.preventDefault();
           }}
           method="POST"
+          className="formEnterpin"
         >
           <div className="form-group">
             <input

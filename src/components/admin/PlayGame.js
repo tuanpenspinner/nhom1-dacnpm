@@ -45,7 +45,7 @@ export class PlayGame extends Component {
             <h2>{question}</h2>
           </div>
           <div className="img"></div>
-          <div className=" row">{answers}</div>
+          <div className="answers">{answers}</div>
         </div>
         <div className="col-12 col-sm-4 statistic">
           <h1>

@@ -1,17 +1,19 @@
 import React, { Component } from "react";
 import axios from "axios";
+import openSocket from "socket.io-client";
+
 import Answer from "./Answer";
 import Question from "./Quetions";
 import Img from "./Img";
 import EnterPin from "./EnterPin";
-import openSocket from "socket.io-client";
+import Waiting from "./Waiting";
 import "./game.css";
+import { endPoint, getDataQuestion } from "../../const";
 
 export class Box extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      endpoint: "https://dacnpm-nhom1.herokuapp.com",
       questions: "",
       numberQuestion: 0,
       score: 0,
@@ -35,8 +37,7 @@ export class Box extends Component {
       rejectUnauthorized: false
     };
 
-    const { endpoint } = this.state;
-    this.socket = openSocket(endpoint, options);
+    this.socket = openSocket(endPoint, options);
     this.socket.on("numberQuestion", data => {
       this.setState({ numberQuestion: data, disableAnswer: false });
     });
@@ -55,7 +56,7 @@ export class Box extends Component {
 
   getData = () => {
     axios
-      .get(`https://dacnpm-nhom1.herokuapp.com/getdata`)
+      .get(getDataQuestion)
       .then(res => {
         const questions = res.data;
         this.setState({
@@ -78,10 +79,10 @@ export class Box extends Component {
     });
     if (numberAnswer === rightAnswer) {
       this.socket.emit("memberAnswer", true);
-      alert("Bạn trả lời đúng rồi")
+      alert("Bạn trả lời đúng rồi");
     } else {
       this.socket.emit("memberAnswer", false);
-      alert("Bạn trả lời sai rồi")
+      alert("Bạn trả lời sai rồi");
     }
     if (questions.length > numberQuestion) {
       this.setState({
@@ -91,7 +92,6 @@ export class Box extends Component {
   };
 
   clickSubmit = (nickName, pin) => {
-    this.socket.emit("creatRoom", 6969);
     this.setState({
       nickName,
       pin
@@ -111,17 +111,19 @@ export class Box extends Component {
       disableAnswer
     } = this.state;
     if (pin === 6969 && nickName && !start) {
-      return <h1>Waiting</h1>;
+      return <Waiting />;
     } else if (questions && start && pin === 6969) {
       return (
-        <div>
-          <Question question={questions[numberQuestion].question} />
-          <Img />
-          <Answer
-            answer={questions[numberQuestion].answer}
-            clickAnswer={this.clickAnswer}
-            disable={disableAnswer}
-          />
+        <div className="wrapper row">
+          <div className="col-12 col-sm-10">
+            <Question question={questions[numberQuestion].question} />
+            <Img />
+            <Answer
+              answer={questions[numberQuestion].answer}
+              clickAnswer={this.clickAnswer}
+              disable={disableAnswer}
+            />
+          </div>
         </div>
       );
     } else {
@@ -130,11 +132,7 @@ export class Box extends Component {
   };
 
   render() {
-    return (
-      <div className="row">
-        <div className=" wrapper col-sm-8 col-lg-8 ">{this.show()}</div>
-      </div>
-    );
+    return <div>{this.show()}</div>;
   }
 }
 

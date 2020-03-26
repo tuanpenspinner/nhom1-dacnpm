@@ -4,12 +4,12 @@ import PreparePlayGame from "./PreparePlayGame";
 import openSocket from "socket.io-client";
 import axios from "axios";
 import "./playgame.css"
+import {endPoint,getDataQuestion} from "../../const"
 
 export class Game extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      endpoint: "https://dacnpm-nhom1.herokuapp.com",
       startPlay: false,
       questions: [],
       numberMember: 0,
@@ -32,9 +32,7 @@ export class Game extends Component {
       secure: true,
       rejectUnauthorized: false
     };
-
-    const { endpoint } = this.state;
-    this.socket = openSocket(endpoint, options);
+    this.socket = openSocket(endPoint, options);
 
     this.socket.on("Number", data => {
       this.setState({
@@ -99,7 +97,7 @@ export class Game extends Component {
 
   getData = () => {
     axios
-      .get(`https://dacnpm-nhom1.herokuapp.com/getdata`)
+      .get(getDataQuestion)
       .then(res => {
         const questions = res.data;
         this.setState({
