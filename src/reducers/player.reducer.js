@@ -1,5 +1,5 @@
 import * as types from "../constants/ActionTypes";
-import { endPoint } from "../const";
+import { endPoint } from "../constants/endPoint";
 import openSocket from "socket.io-client";
 
 var options = {
@@ -10,7 +10,7 @@ var options = {
 };
 var socket = openSocket(endPoint, options);
 
-var intialState = {
+var initState = {
   socket: socket,
   questions: null,
   numberCurrentQuestion: 0,
@@ -22,9 +22,11 @@ var intialState = {
   isJoinRoom: false,
   disableAnswer: false,
   time: 0,
+  answersColor: ["", "", "", ""],
+  answersBackgroundColor: ["", "", "", ""],
 };
 
-var myReducer = (state = intialState, action) => {
+var myReducer = (state = initState, action) => {
   switch (action.type) {
     case types.CLICK_SUBMIT_PIN: {
       state.socket.emit("join_room", action.pin);
@@ -49,6 +51,8 @@ var myReducer = (state = intialState, action) => {
     }
     case types.LOAD_QUESTION: {
       state.disableAnswer = false;
+      state.answersColor = ["", "", "", ""];
+      state.answersBackgroundColor = ["", "", "", ""];
       state.numberCurrentQuestion = action.numberCurrentQuestion;
       if (state.questions)
         state.time = state.questions[state.numberCurrentQuestion].timeAnswer;
@@ -56,11 +60,16 @@ var myReducer = (state = intialState, action) => {
     }
     case types.CLICK_ANSWER: {
       state.disableAnswer = action.disableAnswer;
+      state.answersColor = action.answersColor;
       return { ...state };
     }
-    case types.SET_TIME_QUESTION: {
+    case types.SET_TIME_QUESTION_PLAYER: {
       state.time = action.time;
+
       if (state.time === 0) {
+        var rightAnswer =
+          state.questions[state.numberCurrentQuestion].rightAnswer;
+        state.answersBackgroundColor[rightAnswer - 1] = "bg-success";
         state.disableAnswer = true;
       }
       return { ...state };
