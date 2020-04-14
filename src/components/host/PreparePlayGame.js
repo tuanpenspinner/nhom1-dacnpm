@@ -7,6 +7,8 @@ import music from "./backgroundaudio.mp3";
 
 export class PreparePlayGame extends Component {
   componentDidMount() {
+    this.loadQuestions();
+    
     const { socket, pin } = this.props.host;
 
     socket.emit("creat_room", pin);
@@ -25,17 +27,25 @@ export class PreparePlayGame extends Component {
     });
   }
 
-  onClick = async () => {
-    const { socket } = this.props.host;
-    const { clickStartGame } = this.props;
-    const token=localStorage.getItem("token")
-    socket.emit("start", true);
+  loadQuestions = async () => {
+ 
+    const {getQuestions}=this.props
+    const token = localStorage.getItem("token");
     const questions = await axios.get(endPointDataQuestion, {
       headers: { "x-access-token": `${token}` },
     });
-    socket.emit("questions", questions.data);
-    clickStartGame(true, questions.data);
+    getQuestions(questions.data)
+   
   };
+
+  onClick = async () => {
+    const { socket,questions } = this.props.host;
+    const { clickStartGame } = this.props;
+    socket.emit("start", true);
+    socket.emit("questions", questions);
+    clickStartGame(true);
+  };
+
   render() {
     const { members, pin } = this.props.host;
     const numberMember = members.length;
@@ -77,8 +87,11 @@ const mapStatetoProps = (state) => {
 
 const mapDispathToProps = (dispatch, props) => {
   return {
-    clickStartGame: (playStart, questions) => {
-      dispatch(actions.clickStartGame(playStart, questions));
+    getQuestions: (questions) => {
+      dispatch(actions.getQuestions(questions));
+    },
+    clickStartGame: (playStart) => {
+      dispatch(actions.clickStartGame(playStart));
     },
     saveNewMember: (newMember) => {
       dispatch(actions.saveNewMember(newMember));

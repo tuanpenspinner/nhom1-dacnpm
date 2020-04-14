@@ -1,15 +1,21 @@
 import * as types from "../constants/ActionTypes";
+
+export const getQuestions = questions => {
+  return {
+    type: types.GET_QUESTION,
+    questions
+  };
+};
 export const saveNewMember = newMember => {
   return {
     type: types.SAVE_NEW_MEMBER,
     newMember
   };
 };
-export const clickStartGame = (startPlay, questions) => {
+export const clickStartGame = (startPlay) => {
   return {
     type: types.CLICK_START_PLAY,
-    startPlay,
-    questions
+    startPlay
   };
 };
 export const clickNextQuestion = numberCurrentQuestion => {

@@ -29,8 +29,12 @@ var myReducer = (state = initState, action) => {
     }
     case types.CLICK_START_PLAY: {
       state.startPlay = action.startPlay;
-      state.questions = [...action.questions];
       return { ...state };
+    }
+
+    case types.GET_QUESTION:{
+      state.questions=[...action.questions]
+     return {...state}; 
     }
 
     case types.CLICK_NEXT_QUESTION: {
