@@ -7,6 +7,10 @@ import music from "./backgroundaudio.mp3";
 
 export class PreparePlayGame extends Component {
   componentDidMount() {
+    //Kết nối Host với SocketIo
+    const {connectSocketIoHost}=this.props;
+    connectSocketIoHost();
+    //Load câu hỏi từ database lưu về state host
     this.loadQuestions();
     
     const { socket, pin } = this.props.host;
@@ -87,6 +91,9 @@ const mapStatetoProps = (state) => {
 
 const mapDispathToProps = (dispatch, props) => {
   return {
+    connectSocketIoHost:()=>{
+      dispatch(actions.connectSocketIoHost())
+    },
     getQuestions: (questions) => {
       dispatch(actions.getQuestions(questions));
     },

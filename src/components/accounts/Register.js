@@ -47,7 +47,7 @@ class Register extends Component {
   render() {
     const token = localStorage.getItem("token");
     if (token) {
-      return <Redirect to="/playgame" />;
+      return <Redirect to="/home" />;
     }
     return (
       <div className="background p-1">

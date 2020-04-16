@@ -2,16 +2,9 @@ import * as types from "../constants/ActionTypes";
 import { endPoint } from "../constants/endPoint";
 import openSocket from "socket.io-client";
 
-var options = {
-  rememberUpgrade: true,
-  transports: ["websocket"],
-  secure: true,
-  rejectUnauthorized: false,
-};
-var socket = openSocket(endPoint, options);
 
 var initState = {
-  socket: socket,
+  socket: null,
   pin: Math.floor(Math.random() * 10000) + 1,
   startPlay: false,
   questions: [],
@@ -23,6 +16,17 @@ var initState = {
 };
 var myReducer = (state = initState, action) => {
   switch (action.type) {
+    case types.CONNECT_SOCKET_IO_HOST: {
+      const options = {
+        rememberUpgrade: true,
+        transports: ["websocket"],
+        secure: true,
+        rejectUnauthorized: false,
+      };
+      const socket = openSocket(endPoint, options);
+      state.socket=socket
+      return { ...state };
+    }
     case types.SAVE_NEW_MEMBER: {
       state.members.push(action.newMember);
       return { ...state };

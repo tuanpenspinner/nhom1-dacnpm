@@ -6,6 +6,7 @@ import Game from "./components/host/Game";
 import NotFound from "./components/notfound/NotFound";
 import Login from "./components/accounts/Login";
 import Register from "./components/accounts/Register";
+import Home from "./components/home/Home"
 
 export class App extends Component {
   render() {
@@ -14,6 +15,9 @@ export class App extends Component {
         <Switch>
           <Route path="/" exact>
             <Player />
+          </Route>
+          <Route path="/home" exact>
+            <Home />
           </Route>
           <Route path="/playgame" exact>
             <Game />

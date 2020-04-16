@@ -10,6 +10,10 @@ import "./Player.css";
 
 export class Player extends Component {
   componentDidMount = () => {
+    //Kết nối Player với SocketIo
+    const { connectSocketIoPlayer } = this.props;
+    connectSocketIoPlayer();
+
     const { socket } = this.props.player;
 
     socket.on("is_join_room", (is_join_room) => {
@@ -52,7 +56,7 @@ export class Player extends Component {
       return <EnterPin />;
     }
   };
-
+  
   render() {
     return <div>{this.show()}</div>;
   }
@@ -65,6 +69,9 @@ const mapStatetoProps = (state) => {
 
 const mapDispathToProps = (dispatch, props) => {
   return {
+    connectSocketIoPlayer: () => {
+      dispatch(actions.connectSocketIoPlayer());
+    },
     setTimeQuestion: (time) => {
       dispatch(actions.setTimeQuestion(time));
     },

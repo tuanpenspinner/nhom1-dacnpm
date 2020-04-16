@@ -2,16 +2,8 @@ import * as types from "../constants/ActionTypes";
 import { endPoint } from "../constants/endPoint";
 import openSocket from "socket.io-client";
 
-var options = {
-  rememberUpgrade: true,
-  transports: ["websocket"],
-  secure: true,
-  rejectUnauthorized: false,
-};
-var socket = openSocket(endPoint, options);
-
 var initState = {
-  socket: socket,
+  socket: null,
   questions: null,
   numberCurrentQuestion: 0,
   score: 0,
@@ -28,6 +20,18 @@ var initState = {
 
 var myReducer = (state = initState, action) => {
   switch (action.type) {
+    case types.CONNECT_SOCKET_IO_PLAYER: {
+      const options = {
+        rememberUpgrade: true,
+        transports: ["websocket"],
+        secure: true,
+        rejectUnauthorized: false,
+      };
+      const socket = openSocket(endPoint, options);
+      state.socket=socket
+      return { ...state };
+    }
+
     case types.CLICK_SUBMIT_PIN: {
       state.socket.emit("join_room", action.pin);
       state.socket.emit("nickName", action.nickName);

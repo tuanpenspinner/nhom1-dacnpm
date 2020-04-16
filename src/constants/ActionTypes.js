@@ -1,4 +1,5 @@
 //Player Actions
+export const CONNECT_SOCKET_IO_PLAYER="CONNECT_SOCKET_IO_PLAYER"
 export const CLICK_SUBMIT_PIN = "CLICK_SUBMIT_PIN";
 export const IS_JOIN_ROOM = "IS_JOIN_ROOM";
 export const IS_PLAY = "IS_PLAY";
@@ -7,6 +8,7 @@ export const LOAD_QUESTION = "LOAD_QUESTION";
 export const CLICK_ANSWER = "CLICK_ANSWER";
 export const SET_TIME_QUESTION_PLAYER = "SET_TIME_QUESTION_PLAYER";
 //Host Actions
+export const CONNECT_SOCKET_IO_HOST="CONNECT_SOCKET_IO_HOST"
 export const GET_QUESTION="GET_QUESTION"
 export const SAVE_NEW_MEMBER = "SAVE_NEW_MEMBER";
 export const CLICK_START_PLAY = "CLICK_START_PLAY";

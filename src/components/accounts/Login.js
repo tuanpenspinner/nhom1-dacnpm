@@ -27,7 +27,7 @@ class Login extends Component {
       if (res.data.failLogin) alert(JSON.stringify(res.data.failLogin));
       if (res.data.token) {
         localStorage.setItem("token", res.data.token);
-        this.props.history.push("/playgame")
+        this.props.history.push("/home")
       }
     });
   };
@@ -36,7 +36,7 @@ class Login extends Component {
   render() {
     const token = localStorage.getItem("token");
     if (token) {
-      return <Redirect to="/playgame" />;
+      return <Redirect to="/home" />;
     }
     return (
       <div className="background p-5">
