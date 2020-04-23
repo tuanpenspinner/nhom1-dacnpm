@@ -1,14 +1,13 @@
 import React, { Component } from "react";
-import { Link,Redirect,withRouter  } from "react-router-dom";
+import { Link, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../../actions/actionLogin";
-import { urlLogin } from "../../constants/endPoint";
+import { urlLogin, urlAuthGoogle } from "../../constants/endPoint";
 import axios from "axios";
+import Google from "./Google";
 import "./Login.css";
 
 class Login extends Component {
-
-
   onchange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -27,11 +26,26 @@ class Login extends Component {
       if (res.data.failLogin) alert(JSON.stringify(res.data.failLogin));
       if (res.data.token) {
         localStorage.setItem("token", res.data.token);
-        this.props.history.push("/home")
+        this.props.history.push("/home");
       }
     });
   };
 
+  LoginGoogle = (response) => {
+    const user = {
+      userName: response.profileObj.googleId,
+      fullName: response.profileObj.name,
+      email: response.profileObj.email,
+    };
+    axios.post(urlAuthGoogle, { user: user }).then((res) => {
+      localStorage.setItem("token", res.data.token);
+      this.props.history.push("/home");
+    });
+  };
+
+  onFailure = (error) => {
+    alert(error);
+  };
 
   render() {
     const token = localStorage.getItem("token");
@@ -103,13 +117,10 @@ class Login extends Component {
                     Register
                   </Link>
                   <hr className="mt-5" />
-                  <button
-                    className="btn btn-lg btn-google btn-block text-uppercase"
-                    type="submit"
-                  >
-                    <i className="fa fa-google" aria-hidden="true"></i> Sign in
-                    with Google
-                  </button>
+                  <Google
+                    LoginGoogle={this.LoginGoogle}
+                    onFailure={this.onFailure}
+                  />
                   <button
                     className="btn btn-facebook btn-block text-uppercase"
                     type="submit"
@@ -143,4 +154,4 @@ const mapDispathToProps = (dispatch, props) => {
     },
   };
 };
-export default withRouter(connect(mapStatetoProps, mapDispathToProps) (Login));
+export default withRouter(connect(mapStatetoProps, mapDispathToProps)(Login));

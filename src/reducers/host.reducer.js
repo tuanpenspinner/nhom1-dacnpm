@@ -2,14 +2,14 @@ import * as types from "../constants/ActionTypes";
 import { endPoint } from "../constants/endPoint";
 import openSocket from "socket.io-client";
 
-
 var initState = {
   socket: null,
-  pin: Math.floor(Math.random() * 10000) + 1,
+  pin: Math.floor(Math.random() * 1000000) + 1,
   startPlay: false,
   questions: [],
   numberMembersAnswer: 0,
   members: [],
+  membersBeforeTimeOut: [],
   numberCurrentQuestion: 0,
   time: 0,
   answersBackgroundColor: ["", "", "", ""],
@@ -24,11 +24,15 @@ var myReducer = (state = initState, action) => {
         rejectUnauthorized: false,
       };
       const socket = openSocket(endPoint, options);
-      state.socket=socket
+      state.socket = socket;
       return { ...state };
     }
     case types.SAVE_NEW_MEMBER: {
       state.members.push(action.newMember);
+      return { ...state };
+    }
+    case types.MEMBER_BEFORE_TIME_OUT: {
+      state.membersBeforeTimeOut = action.membersBeforeTimeOut;
       return { ...state };
     }
     case types.CLICK_START_PLAY: {
@@ -36,9 +40,9 @@ var myReducer = (state = initState, action) => {
       return { ...state };
     }
 
-    case types.GET_QUESTION:{
-      state.questions=[...action.questions]
-     return {...state}; 
+    case types.GET_QUESTION: {
+      state.questions = [...action.questions];
+      return { ...state };
     }
 
     case types.CLICK_NEXT_QUESTION: {

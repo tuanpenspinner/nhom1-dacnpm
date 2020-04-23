@@ -20,7 +20,6 @@ class Home extends Component {
   };
 
   sigOut = () => {
-    console.log("Tuấn");
     localStorage.removeItem("token");
   };
   render() {
@@ -29,7 +28,7 @@ class Home extends Component {
       return <Redirect to="/login" />;
     }
     const tokenDecode = jwtDecode(token);
-    const userName = tokenDecode.userName;
+    const userName = tokenDecode.fullName;
     return (
       <div>
         <nav className="navbar navbar-expand-lg navbar-warning bg-warning">
@@ -62,8 +61,8 @@ class Home extends Component {
           </div>
         </nav>
         <div className="container ">
-          <Link to="/playgame">
-            <button type="button" class="btn btn-success m-auto">
+          <Link to="/playgame" replace>
+            <button type="button" className="btn btn-success m-auto">
               Playgame
             </button>
           </Link>

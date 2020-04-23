@@ -18,6 +18,12 @@ export const saveNewMember = (newMember) => {
     newMember,
   };
 };
+export const membersBeforeTimeOut = (membersBeforeTimeOut) => {
+  return {
+    type: types.MEMBER_BEFORE_TIME_OUT,
+    membersBeforeTimeOut,
+  };
+};
 export const clickStartGame = (startPlay) => {
   return {
     type: types.CLICK_START_PLAY,

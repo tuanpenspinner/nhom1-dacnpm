@@ -6,11 +6,19 @@ export const connectSocketIoPlayer = () => {
     };
   };
 
+
 export const submitPIN = (nickName,pin)=>{
     return{
         type:types.CLICK_SUBMIT_PIN,
         nickName,
         pin
+    }
+}
+
+export const saveNewMember = (newMember)=>{
+    return{
+        type:types.SAVE_NEW_MEMBER_PLAYER,
+        newMember
     }
 }
 

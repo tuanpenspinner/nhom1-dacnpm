@@ -15,10 +15,32 @@ export class Player extends Component {
     connectSocketIoPlayer();
 
     const { socket } = this.props.player;
+    socket.on("leave_room", (data) => {
+      socket.emit("exitRoom", true);
+    });
 
     socket.on("is_join_room", (is_join_room) => {
+      const { nickName } = this.props.player;
+      if (is_join_room) {
+        socket.emit("nickName", nickName);
+      } else alert("Phòng chưa được tạo");
+    });
+
+    socket.on("isRightNickName", (data) => {
       const { isJoinRoom } = this.props;
-      isJoinRoom(is_join_room);
+      if (data) {
+        isJoinRoom(true);
+      } else {
+        alert(
+          "NickName bị người khác hớt tay trên,vui lòng tạo nickName khác!!"
+        );
+        isJoinRoom(false);
+      }
+    });
+
+    socket.on("newMember", (newMember) => {
+      const { saveNewMember } = this.props;
+      saveNewMember(newMember);
     });
 
     socket.on("startOk", (start) => {
@@ -35,11 +57,16 @@ export class Player extends Component {
       const { loadQuestion } = this.props;
       loadQuestion(numberCurrentQuestion, false);
     });
+
+    socket.on("hostExit", (is_join_room) => {
+      const { isJoinRoom, isPlay } = this.props;
+      isJoinRoom(false);
+      isPlay(false);
+    });
   };
 
   show = () => {
     const { questions, start, pin, nickName, isJoinRoom } = this.props.player;
-
     if (questions !== null && start && pin && isJoinRoom) {
       return (
         <div className="row">
@@ -56,7 +83,7 @@ export class Player extends Component {
       return <EnterPin />;
     }
   };
-  
+
   render() {
     return <div>{this.show()}</div>;
   }
@@ -74,6 +101,9 @@ const mapDispathToProps = (dispatch, props) => {
     },
     setTimeQuestion: (time) => {
       dispatch(actions.setTimeQuestion(time));
+    },
+    saveNewMember: (newMember) => {
+      dispatch(actions.saveNewMember(newMember));
     },
     isJoinRoom: (isJoinRoom) => {
       dispatch(actions.isJoinRoom(isJoinRoom));

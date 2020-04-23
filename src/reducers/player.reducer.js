@@ -8,6 +8,7 @@ var initState = {
   numberCurrentQuestion: 0,
   score: 0,
   start: false,
+  members: [],
   nickName: "",
   pin: "",
   arrRoom: [],
@@ -28,22 +29,26 @@ var myReducer = (state = initState, action) => {
         rejectUnauthorized: false,
       };
       const socket = openSocket(endPoint, options);
-      state.socket=socket
+
+      state.socket = socket;
       return { ...state };
     }
 
     case types.CLICK_SUBMIT_PIN: {
       state.socket.emit("join_room", action.pin);
-      state.socket.emit("nickName", action.nickName);
       state.pin = action.pin;
       state.nickName = action.nickName;
-
       return { ...state };
     }
     case types.IS_JOIN_ROOM: {
       state.isJoinRoom = action.isJoinRoom;
       return { ...state };
     }
+    case types.SAVE_NEW_MEMBER_PLAYER: {
+      state.members.push(action.newMember);
+      return { ...state };
+    }
+
 
     case types.IS_PLAY: {
       state.start = action.start;
