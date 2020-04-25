@@ -61,7 +61,7 @@ class Home extends Component {
           </div>
         </nav>
         <div className="container ">
-          <Link to="/playgame" replace>
+          <Link to="/playgame" target="_blank">
             <button type="button" className="btn btn-success m-auto">
               Playgame
             </button>
