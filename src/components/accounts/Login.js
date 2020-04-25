@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../../actions/actionLogin";
-import { urlLogin, urlAuthGoogle } from "../../constants/endPoint";
+import { urlLogin } from "../../constants/endPoint";
 import axios from "axios";
 import Google from "./Google";
 import "./Login.css";
@@ -29,22 +29,6 @@ class Login extends Component {
         this.props.history.push("/home");
       }
     });
-  };
-
-  LoginGoogle = (response) => {
-    const user = {
-      userName: response.profileObj.googleId,
-      fullName: response.profileObj.name,
-      email: response.profileObj.email,
-    };
-    axios.post(urlAuthGoogle, { user: user }).then((res) => {
-      localStorage.setItem("token", res.data.token);
-      this.props.history.push("/home");
-    });
-  };
-
-  onFailure = (error) => {
-    alert(error);
   };
 
   render() {
@@ -111,26 +95,14 @@ class Login extends Component {
                   </button>
 
                   <Link
+                    replace
                     className="d-block text-center mt-2 small"
                     to="./register"
                   >
                     Register
                   </Link>
                   <hr className="mt-5" />
-                  <Google
-                    LoginGoogle={this.LoginGoogle}
-                    onFailure={this.onFailure}
-                  />
-                  <button
-                    className="btn btn-facebook btn-block text-uppercase"
-                    type="submit"
-                  >
-                    <i
-                      className="fa fa-facebook-official"
-                      aria-hidden="true"
-                    ></i>{" "}
-                    Sign in with Facebook
-                  </button>
+                  <Google />
                 </form>
               </div>
             </div>

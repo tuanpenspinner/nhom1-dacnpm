@@ -1,13 +1,12 @@
 import React, { Component } from "react";
-import { Link,Redirect  } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../../actions/actionRegister";
 import { urlRegister } from "../../constants/endPoint";
+import Google from "./Google";
 import axios from "axios";
 import "./Login.css";
 class Register extends Component {
-
-
   accountInvalid = (account) => {
     if (
       account.userName != null &&
@@ -22,7 +21,7 @@ class Register extends Component {
 
   onclick = () => {
     const { account } = this.props.register;
-    const acc={...account}
+    const acc = { ...account };
     if (this.accountInvalid(account)) {
       delete acc.confirmPassword;
       axios.post(urlRegister, acc).then((res) => {
@@ -147,23 +146,7 @@ class Register extends Component {
                     login
                   </Link>
                   <hr className="mt-2" />
-                  <button
-                    className="btn btn-lg btn-google btn-block text-uppercase"
-                    type="submit"
-                  >
-                    <i className="fa fa-google" aria-hidden="true"></i> Sign in
-                    with Google
-                  </button>
-                  <button
-                    className="btn btn-lg btn-facebook btn-block text-uppercase"
-                    type="submit"
-                  >
-                    <i
-                      className="fa fa-facebook-official"
-                      aria-hidden="true"
-                    ></i>{" "}
-                    Sign in with Facebook
-                  </button>
+                  <Google />
                 </form>
               </div>
             </div>
