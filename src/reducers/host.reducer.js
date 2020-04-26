@@ -67,9 +67,12 @@ var myReducer = (state = initState, action) => {
     case types.SET_TIME_QUESTION_HOST: {
       state.time = action.time;
       if (state.time === 0) {
-        var rightAnswer =
-          state.questions[state.numberCurrentQuestion].rightAnswer;
-        state.answersBackgroundColor[rightAnswer - 1] = "bg-success";
+        var rightAnswers =
+          state.questions[state.numberCurrentQuestion].rightAnswers.split(',');
+        rightAnswers.forEach((rightAnswer) => {
+          state.answersBackgroundColor[parseInt(rightAnswer) - 1] =
+            "bg-success";
+        });
       }
       return { ...state };
     }

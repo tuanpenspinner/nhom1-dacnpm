@@ -5,6 +5,7 @@ import * as actions from "../../actions/actionLogin";
 import { urlLogin } from "../../constants/endPoint";
 import axios from "axios";
 import Google from "./Google";
+import Facebook from "./Facebook";
 import "./Login.css";
 
 class Login extends Component {
@@ -103,6 +104,7 @@ class Login extends Component {
                   </Link>
                   <hr className="mt-5" />
                   <Google />
+                  <Facebook />
                 </form>
               </div>
             </div>

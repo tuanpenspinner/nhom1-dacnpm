@@ -6,6 +6,7 @@ import { urlRegister } from "../../constants/endPoint";
 import Google from "./Google";
 import axios from "axios";
 import "./Login.css";
+import Facebook from "./Facebook";
 class Register extends Component {
   accountInvalid = (account) => {
     if (
@@ -120,20 +121,6 @@ class Register extends Component {
                     </label>
                   </div>
 
-                  <div className="custom-control custom-checkbox mb-3">
-                    <input
-                      type="checkbox"
-                      className="custom-control-input"
-                      id="customCheck1"
-                      onChange={this.onchange}
-                    />
-                    <label
-                      className="custom-control-label"
-                      htmlFor="customCheck1"
-                    >
-                      Remember password
-                    </label>
-                  </div>
                   <button
                     className="btn btn-lg btn-primary btn-block text-uppercase"
                     type="button"
@@ -145,8 +132,9 @@ class Register extends Component {
                   <Link className="d-block text-center mt-2 small" to="./login">
                     login
                   </Link>
-                  <hr className="mt-2" />
+                  <hr className="mt-5" />
                   <Google />
+                  <Facebook />
                 </form>
               </div>
             </div>

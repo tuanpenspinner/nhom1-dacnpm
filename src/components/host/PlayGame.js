@@ -15,8 +15,9 @@ export class PlayGame extends Component {
     const t = questions[numberCurrentQuestion].timeAnswer;
 
     const { setTimeQuestion,membersBeforeTimeOut } = this.props;
+    membersBeforeTimeOut([...members])
     setTimeQuestion(t);
-    membersBeforeTimeOut(members)
+  
     this.idTimer = setInterval(() => {
       this.timeCountDown();
     }, 300);
@@ -124,12 +125,7 @@ export class PlayGame extends Component {
       }
     };
 
-    const arr = [];
-    arr.push(question.answer1);
-    arr.push(question.answer2);
-    arr.push(question.answer3);
-    arr.push(question.answer4);
-
+    const arr = question.answers.split('||')
     const answers = arr.map((answer, index) => {
       return (
         <button

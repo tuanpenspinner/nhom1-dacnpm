@@ -15,17 +15,16 @@ class Google extends Component {
     axios.post(urlAuthGoogle, { user: user, token: token }).then((res) => {
       localStorage.setItem("token", res.data.token);
       this.props.history.push("/home");
-     
     });
   };
 
   onFailure = (error) => {
-    console.log(error)
+    console.log(error);
   };
   render() {
     return (
       <GoogleLogin
-        className="btn btn-block"
+        className="btn btn-block rounded-pill p-2 "
         clientId="100079736074-pk3glqm7jbtte8tbhmpghtb88es0be37.apps.googleusercontent.com"
         onSuccess={(res) => this.googleResponse(res)}
         onFailure={(e) => this.onFailure(e)}
