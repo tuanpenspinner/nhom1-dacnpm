@@ -40,6 +40,7 @@ export class PreparePlayGame extends Component {
     const questions = await axios.get(endPointDataQuestion, {
       headers: { "x-access-token": `${token}` },
     });
+    console.log( JSON.parse(questions.data[0].test+'').answer1 )
     getQuestions(questions.data);
   };
 
