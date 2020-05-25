@@ -51,12 +51,12 @@ export default class CreateQuiz extends Component {
       arrQuiz,
     });
   };
-  onChangeNameQuiz=(e)=>{
+  onChangeNameQuiz = (e) => {
     const value = e.target.value;
     this.setState({
-      nameQuiz:value
+      nameQuiz: value,
     });
-  }
+  };
   selectImage = (e) => {
     console.log(URL.createObjectURL(e.target.files[0]));
   };
@@ -120,6 +120,15 @@ export default class CreateQuiz extends Component {
       });
     }
   };
+  removeAnswer = (i) => {
+    var { arrQuiz, indexQuiz } = this.state;
+    if (i > 0 || (i === 0 && arrQuiz[indexQuiz].answers.length > 1))
+      arrQuiz[indexQuiz].answers.splice(i, 1);
+    this.setState({
+      arrQuiz,
+    });
+  };
+
   addAnswer = () => {
     let { arrQuiz, indexQuiz } = this.state;
     arrQuiz[indexQuiz].answers.push("");
@@ -129,15 +138,15 @@ export default class CreateQuiz extends Component {
   onSave = () => {
     const { idUser, nameQuiz, arrQuiz, imgQuiz } = this.state;
     const entity = {
-      idUser, 
-      nameQuiz:nameQuiz,
+      idUser,
+      nameQuiz: nameQuiz,
       quiz: [...arrQuiz],
       imgQuiz,
     };
     console.log(entity);
-     axios.post(urlAddQuiz, entity).then((data) => {
-       alert("Thêm thành công")
-     });
+    axios.post(urlAddQuiz, entity).then((data) => {
+      alert("Thêm thành công");
+    });
   };
 
   render() {
@@ -169,6 +178,7 @@ export default class CreateQuiz extends Component {
           <Answer
             key={i}
             index={i}
+            removeAnswer={() => this.removeAnswer(i)}
             onChangeAnswer={this.onChangeAnswer}
             rightAnswer={rightAnswers[i]}
             checkedRightAnswer={this.checkedRightAnswer}
@@ -180,7 +190,10 @@ export default class CreateQuiz extends Component {
 
     return (
       <div>
-        <Menu onSave={this.onSave} onChangeNameQuiz={this.onChangeNameQuiz}></Menu>
+        <Menu
+          onSave={this.onSave}
+          onChangeNameQuiz={this.onChangeNameQuiz}
+        ></Menu>
         <div className="row">
           <div className="col-2 sidebar">
             <div className="scrollBarAddQuiz">{showListQuiz()}</div>
@@ -226,6 +239,10 @@ export default class CreateQuiz extends Component {
                   <option>40</option>
                   <option>50</option>
                   <option>60</option>
+                  <option>70</option>
+                  <option>80</option>
+                  <option>90</option>
+                  <option>100</option>
                 </select>
               </div>
               <div className="img-quiz col-4">

@@ -83,9 +83,9 @@ export class Player extends Component {
     }
   };
   isEqual = (a, b) => {
-    if (a.length != b.length) return false;
+    if (a.length !==b.length) return false;
     else {
-      for (var i = 0; i < a.length; i++) if (a[i] != b[i]) return false;
+      for (var i = 0; i < a.length; i++) if (a[i] !== b[i]) return false;
       return true;
     }
   };

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import jwtDecode from "jwt-decode";
 import Quiz from "./Quiz";
 import Answer from "./Answer";
 import Menu from "./Menu";
@@ -30,7 +29,6 @@ class EditQuiz extends Component {
   }
   UNSAFE_componentWillMount() {
     // const token = localStorage.getItem("token");
-  
 
     const { idQuiz } = this.props.match.params;
     axios.get(urlGetQuizById + `/${idQuiz}`).then((data) => {
@@ -122,6 +120,14 @@ class EditQuiz extends Component {
       });
     }
   };
+  removeAnswer = (i) => {
+    var { arrQuiz, indexQuiz } = this.state;
+    if (i > 0 || (i === 0 && arrQuiz[indexQuiz].answers.length > 1))
+      arrQuiz[indexQuiz].answers.splice(i, 1);
+    this.setState({
+      arrQuiz,
+    });
+  };
   addAnswer = () => {
     let { arrQuiz, indexQuiz } = this.state;
     arrQuiz[indexQuiz].answers.push("");
@@ -173,6 +179,7 @@ class EditQuiz extends Component {
           <Answer
             key={i}
             index={i}
+            removeAnswer={() => this.removeAnswer(i)}
             onChangeAnswer={this.onChangeAnswer}
             rightAnswer={rightAnswers[i]}
             checkedRightAnswer={this.checkedRightAnswer}
