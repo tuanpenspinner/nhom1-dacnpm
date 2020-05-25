@@ -1,32 +1,39 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import jwtDecode from "jwt-decode";
 import Quiz from "./Quiz";
+import Answer from "./Answer";
+import Menu from "./Menu";
 import "./CreateQuiz.css";
+import axios from "axios";
+import { urlAddQuiz } from "../../constants/endPoint";
 
 export default class CreateQuiz extends Component {
   constructor(props) {
     super(props);
-    var timeNow = Date.now();
     this.state = {
-      idQuiz: timeNow,
       arrQuiz: [
         {
           question: "",
           img:
             "https://us.123rf.com/450wm/pavelstasevich/pavelstasevich1811/pavelstasevich181101032/112815935-stock-vector-no-image-available-icon-flat-vector-illustration.jpg?ver=6",
-          answers: {
-            answer1: "",
-            answer2: "",
-            answer3: "",
-            answer4: "",
-          },
-          rightAnswer: [false, false, false, false],
-          time: 0,
-          score: 0,
+          answers: [""],
+          rightAnswers: [false],
+          time: 10,
+          score: 10,
         },
       ],
+      idUser: "",
+      nameQuiz: "",
+      imgQuiz: "",
       indexQuiz: 0,
     };
+  }
+  UNSAFE_componentWillMount() {
+    const token = localStorage.getItem("token");
+    const tokenDecode = jwtDecode(token);
+    this.setState({
+      idUser: tokenDecode.idUser,
+    });
   }
 
   addQuiz = () => {
@@ -35,20 +42,21 @@ export default class CreateQuiz extends Component {
       question: "",
       img:
         "https://us.123rf.com/450wm/pavelstasevich/pavelstasevich1811/pavelstasevich181101032/112815935-stock-vector-no-image-available-icon-flat-vector-illustration.jpg?ver=6",
-      answers: {
-        answer1: "",
-        answer2: "",
-        answer3: "",
-        answer4: "",
-      },
-      rightAnswer: [false, false, false, false],
-      time: 0,
-      score: 0,
+      answers: [""],
+      rightAnswers: [false],
+      time: 10,
+      score: 10,
     });
     this.setState({
       arrQuiz,
     });
   };
+  onChangeNameQuiz=(e)=>{
+    const value = e.target.value;
+    this.setState({
+      nameQuiz:value
+    });
+  }
   selectImage = (e) => {
     console.log(URL.createObjectURL(e.target.files[0]));
   };
@@ -61,12 +69,12 @@ export default class CreateQuiz extends Component {
     });
   };
   onChangeAnswer = (e) => {
-    const name = e.target.name;
+    const name = parseInt(e.target.name);
     const value = e.target.value;
     var { arrQuiz, indexQuiz } = this.state;
     var answers = arrQuiz[indexQuiz].answers;
 
-    answers = { ...answers, [name]: value };
+    answers[name] = value;
     arrQuiz[indexQuiz].answers = answers;
     this.setState({
       arrQuiz,
@@ -76,8 +84,12 @@ export default class CreateQuiz extends Component {
     const name = parseInt(e.target.name);
     const value = e.target.checked;
     var { arrQuiz, indexQuiz } = this.state;
-    arrQuiz[indexQuiz].rightAnswer[name - 1] = value;
-    this.setState({});
+
+    arrQuiz[indexQuiz].rightAnswers[name] = value;
+
+    this.setState({
+      arrQuiz,
+    });
   };
   onChangeSelect = (e) => {
     const name = e.target.name;
@@ -108,6 +120,26 @@ export default class CreateQuiz extends Component {
       });
     }
   };
+  addAnswer = () => {
+    let { arrQuiz, indexQuiz } = this.state;
+    arrQuiz[indexQuiz].answers.push("");
+    this.setState({ arrQuiz: [...arrQuiz] });
+  };
+
+  onSave = () => {
+    const { idUser, nameQuiz, arrQuiz, imgQuiz } = this.state;
+    const entity = {
+      idUser, 
+      nameQuiz:nameQuiz,
+      quiz: [...arrQuiz],
+      imgQuiz,
+    };
+    console.log(entity);
+     axios.post(urlAddQuiz, entity).then((data) => {
+       alert("Thêm thành công")
+     });
+  };
+
   render() {
     const { arrQuiz, indexQuiz } = this.state;
 
@@ -128,32 +160,27 @@ export default class CreateQuiz extends Component {
       });
       return arr;
     };
+
+    const showAnswers = () => {
+      const answers = arrQuiz[indexQuiz].answers;
+      const rightAnswers = arrQuiz[indexQuiz].rightAnswers;
+      return answers.map((answer, i) => {
+        return (
+          <Answer
+            key={i}
+            index={i}
+            onChangeAnswer={this.onChangeAnswer}
+            rightAnswer={rightAnswers[i]}
+            checkedRightAnswer={this.checkedRightAnswer}
+            answer={answer}
+          ></Answer>
+        );
+      });
+    };
+
     return (
       <div>
-        <div className="menu">
-          <Link to="/home">
-            <i
-              className="fa fa-home fa-2x mt-2 ml-5 button-menu "
-              aria-hidden="true"
-            >
-              Home
-            </i>
-          </Link>
-
-          <button className="btn btn-success btn-save">
-            <i className="fa fa-floppy-o fa-2x " aria-hidden="true">
-              Lưu
-            </i>
-          </button>
-
-          <Link to="/home">
-            <button className="btn btn-danger btn-save">
-              <i className="fa fa-times fa-2x " aria-hidden="true">
-                Thoát
-              </i>
-            </button>
-          </Link>
-        </div>
+        <Menu onSave={this.onSave} onChangeNameQuiz={this.onChangeNameQuiz}></Menu>
         <div className="row">
           <div className="col-2 sidebar">
             <div className="scrollBarAddQuiz">{showListQuiz()}</div>
@@ -167,7 +194,6 @@ export default class CreateQuiz extends Component {
           <div className="col-10 create-quiz">
             <textarea
               className="txtQuestion"
-              maxLength="120"
               placeholder="Nhập câu hỏi"
               name="question"
               onChange={this.onChangeQuestion}
@@ -222,76 +248,12 @@ export default class CreateQuiz extends Component {
               </div>
             </div>
 
-            <div className="text-Answers mt-5 row ">
-              <div className="col-6 box-answer">
-                <input
-                  onChange={this.onChangeAnswer}
-                  name="answer1"
-                  className="text-Answer"
-                  maxLength="100"
-                  placeholder="Đáp án 1"
-                  value={arrQuiz[indexQuiz].answers.answer1}
-                ></input>
-                <input
-                  type="checkbox"
-                  className="checkBox"
-                  name="1"
-                  onChange={this.checkedRightAnswer}
-                  checked={arrQuiz[indexQuiz].rightAnswer[0]}
-                ></input>
-              </div>
-              <div className="col-6 box-answer">
-                <input
-                  onChange={this.onChangeAnswer}
-                  name="answer2"
-                  className="text-Answer"
-                  maxLength="100"
-                  placeholder="Đáp án 2"
-                  value={arrQuiz[indexQuiz].answers.answer2}
-                ></input>
-                <input
-                  type="checkbox"
-                  name="2"
-                  onChange={this.checkedRightAnswer}
-                  className="checkBox"
-                  checked={arrQuiz[indexQuiz].rightAnswer[1]}
-                ></input>
-              </div>
-              <div className="col-6 box-answer mt-3">
-                <input
-                  onChange={this.onChangeAnswer}
-                  name="answer3"
-                  className="text-Answer"
-                  maxLength="100"
-                  placeholder="Đáp án 3"
-                  value={arrQuiz[indexQuiz].answers.answer3}
-                ></input>
-                <input
-                  type="checkbox"
-                  name="3"
-                  onChange={this.checkedRightAnswer}
-                  className="checkBox "
-                  checked={arrQuiz[indexQuiz].rightAnswer[2]}
-                ></input>
-              </div>
-              <div className="col-6 box-answer mt-3">
-                <input
-                  onChange={this.onChangeAnswer}
-                  name="answer4"
-                  className="text-Answer"
-                  maxLength="100"
-                  placeholder="Đáp án 4"
-                  value={arrQuiz[indexQuiz].answers.answer4}
-                ></input>
-                <input
-                  type="checkbox"
-                  name="4"
-                  onChange={this.checkedRightAnswer}
-                  className="checkBox"
-                  checked={arrQuiz[indexQuiz].rightAnswer[3]}
-                ></input>
-              </div>
-            </div>
+            <div className="text-Answers mt-5 row ">{showAnswers()}</div>
+            <button className="btn btn-success mt-3" onClick={this.addAnswer}>
+              <i className="fa fa-plus fa-2x " aria-hidden="true">
+                Thêm câu hỏi
+              </i>
+            </button>
           </div>
         </div>
       </div>
