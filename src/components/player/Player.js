@@ -77,13 +77,17 @@ export class Player extends Component {
 
     clickAnswer(true);
     if (this.isEqual(rightAnswers, playerAnswer)) {
+      let { score } = this.props.player;
+      const { setScorePlayer } = this.props;
+      score += parseInt(questions[numberCurrentQuestion].score);
+      setScorePlayer(score);
       socket.emit("memberAnswer", true);
     } else {
       socket.emit("memberAnswer", true);
     }
   };
   isEqual = (a, b) => {
-    if (a.length !==b.length) return false;
+    if (a.length !== b.length) return false;
     else {
       for (var i = 0; i < a.length; i++) if (a[i] !== b[i]) return false;
       return true;
@@ -143,6 +147,9 @@ const mapDispathToProps = (dispatch, props) => {
     },
     setTimeQuestion: (time) => {
       dispatch(actions.setTimeQuestion(time));
+    },
+    setScorePlayer: (score) => {
+      dispatch(actions.setScorePlayer(score));
     },
     saveNewMember: (newMember) => {
       dispatch(actions.saveNewMember(newMember));
