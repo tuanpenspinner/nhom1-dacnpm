@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as actions from "../../actions/actionHost";
+import { withRouter } from "react-router-dom";
 
 export class PlayGame extends Component {
   constructor(props) {
@@ -60,6 +61,13 @@ export class PlayGame extends Component {
       var membersBefore = [...members];
       membersBeforeTimeOut(membersBefore);
       clickNextQuestion();
+    } else {
+      this.props.history.push({
+        pathname: "/player_ranking",
+        state: {
+          members,
+        },
+      });
     }
   };
 
@@ -233,4 +241,6 @@ const mapDispathToProps = (dispatch, props) => {
     },
   };
 };
-export default connect(mapStatetoProps, mapDispathToProps)(PlayGame);
+export default withRouter(
+  connect(mapStatetoProps, mapDispathToProps)(PlayGame)
+);
