@@ -268,7 +268,7 @@ export default class CreateQuiz extends Component {
             <div className="text-Answers mt-5 row ">{showAnswers()}</div>
             <button className="btn bg-success  mt-3" onClick={this.addAnswer}>
               <i className="fa fa-plus fa-1x text-light " aria-hidden="true">
-                Thêm câu hỏi
+                Thêm câu trả lời
               </i>
             </button>
           </div>
